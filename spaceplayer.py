@@ -3,8 +3,10 @@ import spaceweapons
 class SpacePlayer:
     def __init__(self):
         self.inventory =[spaceweapons.PlasmaRay(), spaceweapons.Lightsaber(), 'Gold(5)', 'Crusty Bread']
-        self.x = 9
-        self.y = 9
+        self.x = 10
+        self.y = 10
+        self.health = 70
+        self.strength = 15
     def print_inventory(self):
         print("Inventory:")
         for item in self.inventory:

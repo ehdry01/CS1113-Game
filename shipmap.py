@@ -6,10 +6,31 @@ class MapTile:
     def intro_text(self):
         raise NotImplementedError("Create a subclass instead!")
         
+    def add_barrier(self, barrier):
+        if(len(self.barriers)==0):
+            self.barriers = [barrier]
+        else:
+            self.barriers.append(barrier)
+            
+    def add_item(self, item):
+        if(len(self.items)==0):
+            self.items = [item]
+        else:
+            self.items.append(item)
+            
+    def add_enemy(self, enemy):
+        if(len(self.items)==0):
+            self.items = [item]
+        else:
+            self.items.append(item)
+        
+        
 class StartTile(MapTile):
     def intro_text(self):
         return """
         You are in a space ship that seems to be completely abandoned. Space pods have been used to flee and the lights flicker. You can go Suddenly, a voice comes over the PA system: Can anyone hear me? Hello? This is your captain speaking. The artificial intellegence has mutinied. Please send help.
+        You can go left or forward. The directions are as follows:
+                ^  Forward   <  Left   > Right   \/ Backwards
         """
     
 class BrigHallwayTile(MapTile):
@@ -233,8 +254,6 @@ class StorageTile(MapTile):
         You are in the Storage closet.
         """
     
-
-    
 class ShowersTile(MapTile):
     def intro_text(self):
         return """
@@ -258,25 +277,86 @@ class GenericHallTile(MapTile):
         return """
         You are in a hallway.
         """
-    
-ship_map = [
-    [VictoryTile(0, 0),PodHallTile(1, 0),SuitStorageTile(2, 0), LaundryTile(3, 0),ShowersTile(4, 0),StorageTile(5,0), StorageTile(6,0), BathroomTile(7,0), None,None],
-    [BedroomTile(0,1),None,None,None,ShowersTile(4, 1),LaundryTile(5,1),GenericHallTile(6,1),GenericHallTile(7,1),BedroomTile(8,1),None],
-    [KitchenTile(0,2),FreezerTile(1,2),None,BathroomTile(3,2),None,GenericHallTile(5,2),None,None, None, FreezerTile(9, 2)],
-    [CafeteriaTile(0, 3),None, None, BrigHallwayTile(3,4), BrigHallwayTile(4, 3), BrigHallwayTile(5, 3), BrigHallwayTile(6, 3),None, FreezerTile(8,3),KitchenTile(9,3)],
-    [GymTile(0, 4),MeetingRoomTile(1, 4), MeetingRoomTile(2,4),BrigHallwayTile(3,4),BrigTileOne(4, 4),BrigTileTwo(5, 4), BrigHallwayTile(6, 4), None,None,CafeteriaTile(9, 4)],
-    [None,BrigHallwayTile(1, 5),BrigHallwayTile(2,5), BrigHallwayTile(3, 5),BrigTileThree(4, 5),BrigTileFour(5, 5), BrigHallwayTile(6, 5),BrigHallwayTile(7, 5),PortHallwayTile(8,5), PortFourTile(9, 5)],
-    [PortEightTile(0, 6), PortHallwayTile(1, 6),None,BrigHallwayTile(3,6),BrigHallwayTile(4,6), BrigHallwayTile(5,6), BrigHallwayTile(6,6), BrigHallwayTile(7,6), PortHallwayTile(8, 6), PortThreeTile(9,7)],
-    [PortSevenTile(0,7),PortHallwayTile(1,7),None,None, BridgeHallThree(4, 7),None,BedroomTile(6,7),None, PortHallwayTile(8, 7),PortTwoTile(9, 7)],
-    [PortSixTile(0, 8),PortHallwayTile(1,8),BathroomTile(2, 8), BridgeTileOne(3, 8),BridgeTileTwo(4, 8),BridgeTileThree(5,8),None,None, PortHallwayTile(8, 8),PortOneTile(9, 8)],
-    [PortFiveTile(0, 9),PortHallwayTile(1,9),BridgeHallTwo(2, 9), BridgeTileFour(3, 9),BridgeTileFive(4, 9),BridgeTileSix(5,9),BridgeHallOne(6, 9), ArmoryTile(7, 9),InfirmaryTile(8, 9), StartTile(9, 9)],
-]
+class World:
+    ship_map = [
+        [None, None, None, None, None, None, None, None, None, None, None, None],
+        [None, VictoryTile(1, 1),PodHallTile(2, 1),SuitStorageTile(3, 1), LaundryTile(4, 1),ShowersTile(5, 1),StorageTile(6,1), StorageTile(7,1), BathroomTile(8,1), None,None, None],
+        [None, BedroomTile(1,2),None,None,None,ShowersTile(5, 2),LaundryTile(6,2),GenericHallTile(7,2),GenericHallTile(8,2),BedroomTile(9,2),None,None],
+        [None, KitchenTile(1,3),FreezerTile(2,3),None,BathroomTile(4,3),None,GenericHallTile(7,3),None,None, None, FreezerTile(10, 3), None],
+        [None, CafeteriaTile(1, 4),None, None, BrigHallwayTile(4,4), BrigHallwayTile(5, 4), BrigHallwayTile(6, 4), BrigHallwayTile(7, 4),None, FreezerTile(9,4),KitchenTile(10,4), None],
+        [None, GymTile(1, 5),MeetingRoomTile(2, 5), MeetingRoomTile(3,5),BrigHallwayTile(4,5),BrigTileOne(5, 5),BrigTileTwo(6, 5), BrigHallwayTile(7, 5), None,None,CafeteriaTile(10, 5), None],
+        [None, None,BrigHallwayTile(2, 6),BrigHallwayTile(3,6), BrigHallwayTile(4, 6),BrigTileThree(5, 6),BrigTileFour(6, 6), BrigHallwayTile(7, 6),BrigHallwayTile(8, 6),PortHallwayTile(9,6), PortFourTile(10, 6), None],
+        [None, PortEightTile(1, 7), PortHallwayTile(2, 7),None,BrigHallwayTile(4,7),BrigHallwayTile(5,7), BrigHallwayTile(6,7), BrigHallwayTile(7,7), BrigHallwayTile(8,7), PortHallwayTile(9, 7), PortThreeTile(10,7), None],
+        [None, PortSevenTile(1,8),PortHallwayTile(2,8),None,None, BridgeHallThree(5, 8),None,BedroomTile(7,8),None, PortHallwayTile(9, 8),PortTwoTile(10, 8), None],
+        [None, PortSixTile(1, 9),PortHallwayTile(2,9),BathroomTile(3, 9), BridgeTileOne(4, 9),BridgeTileTwo(5, 9),BridgeTileThree(6,9),None,None, PortHallwayTile(9, 9),PortOneTile(10, 9), None],
+        [None, PortFiveTile(1, 10),PortHallwayTile(2, 10),BridgeHallTwo(3, 10), BridgeTileFour(4, 10), BridgeTileFive(5, 10), BridgeTileSix(6,10), BridgeHallOne(7, 10), ArmoryTile(8, 10), InfirmaryTile(9, 10), StartTile(10, 10), None],
+        [None, None, None, None, None, None, None, None, None, None, None, None]
+    ]
 
-def tile_at(x,y):
-    if x<0 or y<0:
-        return None
-    try:
-        return ship_map[y][x]
-    except IndexError:
-        return None
-    
+    def tile_at(self,x,y):
+        if x<0 or y<0:
+            return None
+        try:
+            return self.ship_map[y][x]
+        except IndexError:
+            return None
+
+
+    def check_forward(self, x, y):
+            if y-1 < 0:
+                room = None
+            try:
+                room = self.ship_map[y-1][x]
+            except IndexError:
+                room = None
+
+            if(room):
+                return [True, "You have moved forward"]
+            else:
+                return [False, "There is a wall there."]
+
+    def check_back(self, x, y):
+            if y+1 < 0:
+                room = None
+            try:
+                room = self.ship_map[y+1][x]
+            except IndexError:
+                room = None
+
+            if(room):
+                return [True, " "]
+            else:
+                return [False, "There is a wall there."]
+
+    def check_left(self, x, y):
+            if x-1 < 0:
+                room = None
+            try:
+                room = self.ship_map[y][x-1]
+            except IndexError:
+                room = None
+
+            if(room):
+                return [True, " "]
+            else:
+                return [False, "There is a wall there."]
+
+    def check_right(self, x, y):
+            if x+1 < 0:
+                room = None
+            try:
+                room = self.ship_map[y][x+1]
+            except IndexError:
+                room = None
+
+            if(room):
+                return [True, " "]
+            else:
+                return [False, "There is a wall there."]
+            
+            
+    def updateRooms(self, spaceplayer):
+        for row in self.ship_map:
+            for room in row:
+                if(room):
+                    room.update(spaceplayer)
