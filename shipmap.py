@@ -1,28 +1,135 @@
 class MapTile:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        
-    def intro_text(self):
-        raise NotImplementedError("Create a subclass instead!")
-        
-    def add_barrier(self, barrier):
-        if(len(self.barriers)==0):
-            self.barriers = [barrier]
-        else:
-            self.barriers.append(barrier)
-            
-    def add_item(self, item):
-        if(len(self.items)==0):
-            self.items = [item]
-        else:
-            self.items.append(item)
-            
-    def add_enemy(self, enemy):
-        if(len(self.items)==0):
-            self.items = [item]
-        else:
-            self.items.append(item)
+	description = "Do not create raw MapTiles! Create a subclass instead!"
+	barriers = []
+	enemies = []
+	items = []
+	npcs = []
+	
+	def __init__(self, x=0, y=0, barriers = [], items = [], enemies = [], npcs = []):
+		self.x = x
+		self.y = y
+		for barrier in barriers:
+			self.add_barrier(barrier)
+		for item in items:
+			self.add_item(item)
+		for enemy in enemies:
+			self.add_enemy(enemy)
+		for npc in npcs:
+			self.add_npc(npc)
+	
+	def intro_text(self):
+		text = self.description
+		directions_blocked = []
+		
+		for enemy in self.enemies:
+			if (enemy.direction):
+				if(enemy.direction not in directions_blocked):
+					directions_blocked.append(enemy.direction)
+			text += " " + enemy.check_text()
+		for barrier in self.barriers:
+			if (barrier.direction):
+				if(barrier.direction not in directions_blocked):
+					if(barrier.verbose):
+						text += " " + barrier.description()
+		for npc in self.npcs:
+			text += " " + npc.check_text()
+		for item in self.items:
+			text += " " + item.room_text()
+
+		return text
+		
+	def handle_input(self, verb, noun1, noun2, inventory):
+		if(not noun2):
+			if(verb == 'check'):
+				for barrier in self.barriers:
+					if(barrier.name):
+						if(barrier.name.lower() == noun1):
+							return [True, barrier.description(), inventory]
+				for item in self.items:
+					if(item.name.lower() == noun1):
+						return [True, item.check_text(), inventory]
+				for enemy in self.enemies:
+					if(enemy.name.lower() == noun1):
+						return [True, enemy.check_text(), inventory]
+				for npc in self.npcs:
+					if(npc.name.lower() == noun1):
+						return [True, npc.check_text(), inventory]
+			elif(verb == 'take'):
+				for index in range(len(self.items)):
+					if(self.items[index].name.lower() == noun1):
+						if(isinstance(self.items[index], items.Item)):
+							pickup_text = "You picked up the %s." % self.items[index].name
+							inventory.append(self.items[index])
+							self.items.pop(index)
+							return [True, pickup_text, inventory]
+						else:
+							return [True, "The %s is too heavy to pick up." % self.items[index].name, inventory]
+			elif(verb == 'drop'):
+				for index in range(len(inventory)):
+					if(inventory[index].name.lower() == noun1):
+						inventory[index].is_dropped = True
+						drop_text = "You dropped the %s." % inventory[index].name
+						self.add_item(inventory[index])
+						inventory.pop(index)
+						return [True, drop_text, inventory]
+
+		for list in [self.barriers, self.items, self.enemies, self.npcs]:
+			for item in list:
+				[status, description, inventory] = item.handle_input(verb, noun1, noun2, inventory)
+				if(status):
+					return [status, description, inventory]
+					
+		for list in [self.barriers, self.items, self.enemies, self.npcs]:			# Added to give the player feedback if they have part of the name of an object correct.
+			for item in list:
+				if(item.name):
+					if(noun1 in item.name):
+						return [True, "Be more specific.", inventory]
+			
+		return [False, "", inventory]
+		
+	def add_barrier(self, barrier):
+		if(len(self.barriers) == 0):
+			self.barriers = [barrier]		# Initialize the list if it is empty.
+		else:
+			self.barriers.append(barrier)	# Add to the list if it is not empty.
+			
+	def add_item(self, item):
+		if(len(self.items) == 0):
+			self.items = [item]		# Initialize the list if it is empty.
+		else:
+			self.items.append(item)	# Add to the list if it is not empty.
+			
+	def add_enemy(self, enemy):
+		if(len(self.enemies) == 0):
+			self.enemies = [enemy]		# Initialize the list if it is empty.
+		else:
+			self.enemies.append(enemy)	# Add to the list if it is not empty.
+			
+	def add_npc(self, npc):
+		if(len(self.npcs) == 0):
+			self.npcs = [npc]		# Initialize the list if it is empty.
+		else:
+			self.npcs.append(npc)	# Add to the list if it is not empty.
+			
+	def random_spawn(self):
+		pass						# Update this for your specific subclass if you want randomly spawning enemies.
+			
+	def update(self, player):
+		dead_enemy_indices = []
+		for index in range(len(self.enemies)):
+			if (not self.enemies[index].is_alive()):
+				dead_enemy_indices.append(index)
+				for item in self.enemies[index].loot:
+					self.add_item(item)
+		for index in reversed(dead_enemy_indices):
+			self.enemies.pop(index)
+		if(self.x == player.x and self.y == player.y):
+			for enemy in self.enemies:
+				if(enemy.agro):
+					agro_text = "The %s seems very aggitated. It attacks! " % enemy.name
+					agro_text += player.take_damage(enemy.damage)
+					print()
+					print(agro_text)
         
         
 class StartTile(MapTile):
@@ -223,6 +330,23 @@ class FreezerTile(MapTile):
         return """
         You are in the Freezer. Best hope it doesn't lock.
         """
+		
+	def update(self, player):
+		dead_enemy_indices = []
+		for index in range(len(self.enemies)):
+			if (not self.enemies[index].is_alive()):
+				dead_enemy_indices.append(index)
+				for item in self.enemies[index].loot:
+					self.add_item(item)
+		for index in reversed(dead_enemy_indices):
+			self.enemies.pop(index)
+		if(self.x == player.x and self.y == player.y):		# Add some kind of counter here to determine how long the player has been in the freezer.
+			for enemy in self.enemies:
+				if(enemy.agro):
+					agro_text = "The %s seems very aggitated. It attacks! " % enemy.name
+					agro_text += player.take_damage(enemy.damage)
+					print()
+					print(agro_text)
     
 class BathroomTile(MapTile):
     def intro_text(self):

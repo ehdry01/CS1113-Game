@@ -1,8 +1,16 @@
 class SpaceWeapon:
+
+	name = "Do not create raw Item objects!"
+	
+	description = "You should define a description for items in their subclass."
+	dropped_description = "You should define the description for this item after it is dropped in its subclass."
+	
     def __init__(self):
         raise NotImplementedError("Do not create raw Weapon objects.")
     def __str__(self):
         return self.name
+		
+
 class PlasmaRay(SpaceWeapon):
     def __init__(self):
         self.name = 'Plasma Ray'
