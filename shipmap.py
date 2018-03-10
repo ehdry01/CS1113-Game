@@ -1,10 +1,32 @@
+from random import randint
+import spaceitems
+import spaceenemies
+import barriers
+import spaceplayer
+
 class MapTile:
-	description = "Do not create raw MapTiles! Create a subclass instead!"
+	description= "Do not create raw MapTiles! Create a subclass instead!"
 	barriers = []
 	enemies = []
 	items = []
 	npcs = []
-	
+    
+	def random_spawn(self):
+		if(randint(0,3)==0):
+			self.enemies = [spaceenemies.Greebybobe()]
+		else:
+			self.enemies = []
+	def random_spawn(self):
+		if(randint(0,3)==0):
+			self.enemies = [spaceenemies.TelepathicSpider()]
+		else:
+			self.enemies = [] 
+	def random_spawn(self):
+		if(randint(0,3)==0):
+			self.enemies = [spaceenemies.FFloopian()]
+		else:
+			self.enemies = [] 
+            
 	def __init__(self, x=0, y=0, barriers = [], items = [], enemies = [], npcs = []):
 		self.x = x
 		self.y = y
@@ -16,15 +38,15 @@ class MapTile:
 			self.add_enemy(enemy)
 		for npc in npcs:
 			self.add_npc(npc)
-	
+            
 	def intro_text(self):
 		text = self.description
 		directions_blocked = []
 		
 		for enemy in self.enemies:
-			if (enemy.direction):
-				if(enemy.direction not in directions_blocked):
-					directions_blocked.append(enemy.direction)
+			#if (enemy.direction):
+				#if(enemy.direction not in directions_blocked):
+				#	directions_blocked.append(enemy.direction)
 			text += " " + enemy.check_text()
 		for barrier in self.barriers:
 			if (barrier.direction):
@@ -34,7 +56,8 @@ class MapTile:
 		for npc in self.npcs:
 			text += " " + npc.check_text()
 		for item in self.items:
-			text += " " + item.room_text()
+			text += """ 
+            - """ + item.check_text()
 
 		return text
 		
@@ -57,7 +80,7 @@ class MapTile:
 			elif(verb == 'take'):
 				for index in range(len(self.items)):
 					if(self.items[index].name.lower() == noun1):
-						if(isinstance(self.items[index], items.Item)):
+						if(isinstance(self.items[index], spaceitems.Item)):
 							pickup_text = "You picked up the %s." % self.items[index].name
 							inventory.append(self.items[index])
 							self.items.pop(index)
@@ -133,272 +156,341 @@ class MapTile:
         
         
 class StartTile(MapTile):
-    def intro_text(self):
-        return """
-        You are in a space ship that seems to be completely abandoned. Space pods have been used to flee and the lights flicker. You can go Suddenly, a voice comes over the PA system: Can anyone hear me? Hello? This is your captain speaking. The artificial intellegence has mutinied. Please send help.
+    description= """
+        You are in a space ship that seems to be completely abandoned. Space pods have been used to flee and the lights flicker. Suddenly, a voice comes over the PA system: Can anyone hear me? Hello? This is your captain speaking. The artificial intellegence has mutinied. Please send help.
         You can go left or forward. The directions are as follows:
                 ^  Forward   <  Left   > Right   \/ Backwards
         """
-    
 class BrigHallwayTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in a hallway around the cells in the brig. You can see there are 4 cells, all have been broken out of.
         """
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
     
 class BrigTileOne(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Cell One.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.Gazorpian()]
+        else:
+            self.enemies = []
+            
 class BrigTileTwo(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Cell Two.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.Gazorpian()]
+        else:
+            self.enemies = []
+            
 class BrigTileThree(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Cell Three.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.Gazorpian()]
+        else:
+            self.enemies = []
+            
 class BrigTileFour(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Cell Four.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.Gazorpian()]
+        else:
+            self.enemies = []
+            
 class PortHallwayTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in a hallway between the ports. Alien ships are starting to dock as the defenses have been shut off.
         """
     
 class PortOneTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Port One.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.GearPerson()]
+        else:
+            self.enemies = []
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.TelepathicSpider()]
+        else:
+            self.enemies = []
+            
 class PortTwoTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Port Two.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.GearPerson()]
+        else:
+            self.enemies = []
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.TelepathicSpider()]
+        else:
+            self.enemies = []
+            
 class PortThreeTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Port Three.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.GearPerson()]
+        else:
+            self.enemies = []
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.TelepathicSpider()]
+        else:
+            self.enemies = []
+            
 class PortFourTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Port Four.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.GearPerson()]
+        else:
+            self.enemies = []
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.TelepathicSpider()]
+        else:
+            self.enemies = []
 class PortFiveTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Port Five.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.GearPerson()]
+        else:
+            self.enemies = []
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.TelepathicSpider()]
+        else:
+            self.enemies = []  
 class PortSixTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Port Six.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.GearPerson()]
+        else:
+            self.enemies = []
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.TelepathicSpider()]
+        else:
+            self.enemies = []        
 class PortSevenTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Port Seven.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.GearPerson()]
+        else:
+            self.enemies = []
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.TelepathicSpider()]
+        else:
+            self.enemies = []        
 class PortEightTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in Port Eight.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==0):
+            self.enemies = [spaceenemies.GearPerson()]
+        else:
+            self.enemies = []
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.TelepathicSpider()]
+        else:
+            self.enemies = []
 class BridgeHallwayTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in a hallway around the bridge.
         """
     
-class BridgeHallOne(BridgeHallwayTile):
-    def intro_text(self):
-        return """
+class BridgeHallOne(MapTile):
+    description= """
         You can go left or right.
         """
     
-class BridgeHallTwo(BrigHallwayTile):
-    def intro_text(self):
-        return """
+class BridgeHallTwo(MapTile):
+    description= """
         You can go left or right.
         """
     
-class BridgeHallThree(BrigHallwayTile):
-    def intro_text(self):
-        return """
+class BridgeHallThree(MapTile):
+    description= """
         You can go forward or backwards.
         """
     
 class BridgeTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are on the bridge. The system controls have been shut off, but you can see there are 6 sections.
         """
     
 class BridgeTileOne(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the first section.
         """
     
 class BridgeTileTwo(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the second section.
         """
     
 class BridgeTileThree(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the third section.
         """
     
 class BridgeTileFour(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the fourth section.
         """
     
 class BridgeTileFive(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the fifth section.
         """
     
 class BridgeTileSix(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the sixth section.
         """
+    items = [spaceitems.PodKey()]
     
 class VictoryTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You get in the escape pod and make it to a nearby planet. Help is on the way to your ship and your captain.
         """
 
 class InfirmaryTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the infirmary. You can go right, left, or forward.
         """
-    
 class ArmoryTile(MapTile):
-    def intro_text(self):
-        return """
-        You are in the Armory. You there are plasma rays and lightsaber. You can go right, left, or forward.
+    description= """
+        You are in the Armory. You can go right, left, or forward.
         """
+    items = [spaceitems.PlasmaRay(), spaceitems.Lightsaber()]
     
 class CafeteriaTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the Cafeteria.
         """
+    items = [spaceitems.SpaceCream(), spaceitems.SpaceSandwich()]
     
 class GymTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the Gym.
         """
     
 class KitchenTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the Kitchen.
         """
 class FreezerTile(MapTile):
-    def intro_text(self):
-        return """
-        You are in the Freezer. Best hope it doesn't lock.
+    description= """
+        You are in the Freezer.
         """
-		
-	def update(self, player):
-		dead_enemy_indices = []
-		for index in range(len(self.enemies)):
-			if (not self.enemies[index].is_alive()):
-				dead_enemy_indices.append(index)
-				for item in self.enemies[index].loot:
-					self.add_item(item)
-		for index in reversed(dead_enemy_indices):
-			self.enemies.pop(index)
-		if(self.x == player.x and self.y == player.y):		# Add some kind of counter here to determine how long the player has been in the freezer.
-			for enemy in self.enemies:
-				if(enemy.agro):
-					agro_text = "The %s seems very aggitated. It attacks! " % enemy.name
-					agro_text += player.take_damage(enemy.damage)
-					print()
-					print(agro_text)
-    
+    def update(self, player):
+        dead_enemy_indices = []
+        for index in range(len(self.enemies)):
+            if (not self.enemies[index].is_alive()):
+                dead_enemy_indices.append(index)
+                for item in self.enemies[index].loot:
+                    self.add_item(item)
+        for index in reversed(dead_enemy_indices):
+            self.enemies.pop(index)
+        if(self.x == player.x and self.y == player.y):		# Add some kind of counter here to determine how long the player has been in the freezer.
+            for enemy in self.enemies:
+                if(enemy.agro):
+                    agro_text = "The %s seems very aggitated. It attacks! " % enemy.name
+                    agro_text += player.take_damage(enemy.damage)
+                    print()
+                    print(agro_text)
+                    
+    def random_spawn(self):
+        if(randint(0,1)==0):
+            if(self.x == 9):
+                self.barriers = [barriers.FreezerDoor('r')]
+            elif(self.x == 2):
+                self.barriers = [barriers.FreezerDoor('l')]
+        else:
+            print("The AI might lock it soon.")
+
 class BathroomTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the Bathroom.
         """
     
 class MeetingRoomTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the Meeting Room
         """
     
 class BedroomTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the Bedroom.
         """
     
 class LaundryTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the Laundry Room.
         """
     
 class StorageTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the Storage closet.
         """
     
 class ShowersTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the Showers.
         """
     
 class SuitStorageTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the suit storage closet.
         """
-    
+    def random_spawn(self):
+        if(0==0):
+            self.barriers = [barriers.PodDoor('l')]
+            
 class PodHallTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in the hallway to the escape pods.
         """
-    
 class GenericHallTile(MapTile):
-    def intro_text(self):
-        return """
+    description= """
         You are in a hallway.
         """
 class World:
@@ -406,7 +498,7 @@ class World:
         [None, None, None, None, None, None, None, None, None, None, None, None],
         [None, VictoryTile(1, 1),PodHallTile(2, 1),SuitStorageTile(3, 1), LaundryTile(4, 1),ShowersTile(5, 1),StorageTile(6,1), StorageTile(7,1), BathroomTile(8,1), None,None, None],
         [None, BedroomTile(1,2),None,None,None,ShowersTile(5, 2),LaundryTile(6,2),GenericHallTile(7,2),GenericHallTile(8,2),BedroomTile(9,2),None,None],
-        [None, KitchenTile(1,3),FreezerTile(2,3),None,BathroomTile(4,3),None,GenericHallTile(7,3),None,None, None, FreezerTile(10, 3), None],
+        [None, KitchenTile(1,3),FreezerTile(2,3),None,BathroomTile(4,3),None,GenericHallTile(7,3),None,None, None, None, None],
         [None, CafeteriaTile(1, 4),None, None, BrigHallwayTile(4,4), BrigHallwayTile(5, 4), BrigHallwayTile(6, 4), BrigHallwayTile(7, 4),None, FreezerTile(9,4),KitchenTile(10,4), None],
         [None, GymTile(1, 5),MeetingRoomTile(2, 5), MeetingRoomTile(3,5),BrigHallwayTile(4,5),BrigTileOne(5, 5),BrigTileTwo(6, 5), BrigHallwayTile(7, 5), None,None,CafeteriaTile(10, 5), None],
         [None, None,BrigHallwayTile(2, 6),BrigHallwayTile(3,6), BrigHallwayTile(4, 6),BrigTileThree(5, 6),BrigTileFour(6, 6), BrigHallwayTile(7, 6),BrigHallwayTile(8, 6),PortHallwayTile(9,6), PortFourTile(10, 6), None],
@@ -427,57 +519,69 @@ class World:
 
 
     def check_forward(self, x, y):
-            if y-1 < 0:
-                room = None
-            try:
-                room = self.ship_map[y-1][x]
-            except IndexError:
-                room = None
+        for barrier in self.ship_map[y][x].barriers:
+            if(barrier.direction == 'forward' and not barrier.passable):
+                return [False, barrier.description()]	
 
-            if(room):
-                return [True, "You have moved forward"]
-            else:
-                return [False, "There is a wall there."]
+        if y-1 < 0:
+            room = None
+        try:
+            room = self.ship_map[y-1][x]
+        except IndexError:
+            room = None
 
+        if(room):
+            return [True, "You have moved forward"]
+        else:
+            return [False, "There is a wall there."]
     def check_back(self, x, y):
-            if y+1 < 0:
-                room = None
-            try:
-                room = self.ship_map[y+1][x]
-            except IndexError:
-                room = None
+        for barrier in self.ship_map[y][x].barriers:
+            if(barrier.direction == 'back' and not barrier.passable):
+                return [False, barrier.description()]
 
-            if(room):
-                return [True, " "]
-            else:
-                return [False, "There is a wall there."]
+        if y+1 < 0:
+            room = None
+        try:
+            room = self.ship_map[y+1][x]
+        except IndexError:
+            room = None
+                
+        if(room):
+            return [True, " "]
+        else:
+            return [False, "There is a wall there."]
 
     def check_left(self, x, y):
-            if x-1 < 0:
-                room = None
-            try:
-                room = self.ship_map[y][x-1]
-            except IndexError:
-                room = None
-
-            if(room):
-                return [True, " "]
-            else:
-                return [False, "There is a wall there."]
+        for barrier in self.ship_map[y][x].barriers:
+            if(barrier.direction == 'left' and not barrier.passable):
+                return [False, barrier.description()]
+        if x-1 < 0:
+            room = None
+        try:
+            room = self.ship_map[y][x-1]
+        except IndexError:
+            room = None
+            
+        if(room):
+            return [True, " "]
+        else:
+            return [False, "There is a wall there."]
 
     def check_right(self, x, y):
-            if x+1 < 0:
-                room = None
-            try:
-                room = self.ship_map[y][x+1]
-            except IndexError:
-                room = None
-
-            if(room):
-                return [True, " "]
-            else:
-                return [False, "There is a wall there."]
-            
+        for barrier in self.ship_map[y][x].barriers:
+            if(barrier.direction == 'right' and not barrier.passable):
+                return [False, barrier.description()]
+        if x+1 < 0:
+            room = None
+        try:
+            room = self.ship_map[y][x+1]
+        except IndexError:
+            room = None
+                
+        if(room):
+            return [True, " "]
+        else:
+            return [False, "There is a wall there."]
             
     def updateRooms(self, spaceplayer):
         for row in self.ship_map:

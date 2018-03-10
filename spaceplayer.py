@@ -3,11 +3,10 @@ import items
 
 class SpacePlayer:
 	def __init__(self):
-		self.inventory =[spaceitems.PlasmaRay(), spaceitems.Lightsaber()]
+		self.inventory =[]
 		self.weapon = None
 		self.x = 10
 		self.y = 10
-		self.hp = 70
 		self.hp = 70
 		self.max_hp = 70
 		self.strength = 15
@@ -97,9 +96,9 @@ class SpacePlayer:
 		elif(verb == 'consume'):
 			for item in self.inventory:
 				if item.name.lower() == noun1:
-					if(isinstance(item, items.Consumable)):
-						heal_text = item.consume_description
-						heal_text += " " + self.heal(item.healing_value)
+					if(isinstance(item, spaceitems.SpaceFood)):
+						heal_text = item.eatenText
+						heal_text += " " + self.heal(item.addedHP)
 						self.inventory.pop(self.inventory.index(item))
 						return [True, heal_text]
 		elif(verb == 'equip'):
