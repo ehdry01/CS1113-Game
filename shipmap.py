@@ -149,7 +149,7 @@ class MapTile:
 		if(self.x == player.x and self.y == player.y):
 			for enemy in self.enemies:
 				if(enemy.agro):
-					agro_text = "The %s seems very aggitated. It attacks! " % enemy.name
+					agro_text = "The %s seems very agitated. It attacks! " % enemy.name
 					agro_text += player.take_damage(enemy.damage)
 					print()
 					print(agro_text)
@@ -335,58 +335,114 @@ class BridgeHallwayTile(MapTile):
     description= """
         You are in a hallway around the bridge.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeHallOne(MapTile):
     description= """
-        You can go left or right.
+        You are in the hallway to the bridge. You can go left or right.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeHallTwo(MapTile):
     description= """
-        You can go left or right.
+        You are in the hallway to the bridge. You can go left or right.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeHallThree(MapTile):
     description= """
-        You can go forward or backwards.
+        You are in the hallway to the bridge. You can go forward or backwards.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeTile(MapTile):
     description= """
         You are on the bridge. The system controls have been shut off, but you can see there are 6 sections.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeTileOne(MapTile):
     description= """
-        You are in the first section.
+        You are in the first section of the bridge.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeTileTwo(MapTile):
     description= """
-        You are in the second section.
+        You are in the second section of the bridge.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeTileThree(MapTile):
     description= """
-        You are in the third section.
+        You are in the third section of the bridge.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeTileFour(MapTile):
     description= """
-        You are in the fourth section.
+        You are in the fourth section of the bridge.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeTileFive(MapTile):
     description= """
-        You are in the fifth section.
+        You are in the fifth section of the bridge.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class BridgeTileSix(MapTile):
     description= """
-        You are in the sixth section.
+        You are in the sixth section of the bridge.
         """
     items = [spaceitems.PodKey()]
-    
+	
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.Gromflamite()]
+        else:
+            self.enemies = []
+			
 class VictoryTile(MapTile):
     description= """
         You get in the escape pod and make it to a nearby planet. Help is on the way to your ship and your captain.
@@ -396,6 +452,8 @@ class InfirmaryTile(MapTile):
     description= """
         You are in the infirmary. You can go right, left, or forward.
         """
+    items = [spaceitems.Gauze(), spaceitems.IcePack(), spaceitems.BandAid()]
+    
 class ArmoryTile(MapTile):
     description= """
         You are in the Armory. You can go right, left, or forward.
@@ -417,6 +475,8 @@ class KitchenTile(MapTile):
     description= """
         You are in the Kitchen.
         """
+    items = [spaceitems.SpaceCarrots(), spaceitems.SpaceSoda()]
+	
 class FreezerTile(MapTile):
     description= """
         You are in the Freezer.
@@ -451,12 +511,22 @@ class BathroomTile(MapTile):
     description= """
         You are in the Bathroom.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.FFloopian()]
+        else:
+            self.enemies = []
+			
 class MeetingRoomTile(MapTile):
     description= """
         You are in the Meeting Room
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.GreebyBobes()]
+        else:
+            self.enemies = []
+			
 class BedroomTile(MapTile):
     description= """
         You are in the Bedroom.
@@ -471,7 +541,12 @@ class StorageTile(MapTile):
     description= """
         You are in the Storage closet.
         """
-    
+    def random_spawn(self):
+        if(randint(0,3)==1):
+            self.enemies = [spaceenemies.FFloopian()]
+        else:
+            self.enemies = []
+			
 class ShowersTile(MapTile):
     description= """
         You are in the Showers.
@@ -481,6 +556,7 @@ class SuitStorageTile(MapTile):
     description= """
         You are in the suit storage closet.
         """
+	
     def random_spawn(self):
         if(0==0):
             self.barriers = [barriers.PodDoor('l')]
@@ -489,10 +565,12 @@ class PodHallTile(MapTile):
     description= """
         You are in the hallway to the escape pods.
         """
+	
 class GenericHallTile(MapTile):
     description= """
         You are in a hallway.
         """
+	
 class World:
     ship_map = [
         [None, None, None, None, None, None, None, None, None, None, None, None],

@@ -101,6 +101,22 @@ class SpacePlayer:
 						heal_text += " " + self.heal(item.addedHP)
 						self.inventory.pop(self.inventory.index(item))
 						return [True, heal_text]
+		elif(verb == 'drink'):
+			for item in self.inventory:
+				if item.name.lower() == noun1:
+					if(isinstance(item, spaceitems.SpaceFood)):
+						heal_text = item.eatenText
+						heal_text += " " + self.heal(item.addedHP)
+						self.inventory.pop(self.inventory.index(item))
+						return [True, heal_text]
+		elif(verb == 'use'):
+			for item in self.inventory:
+				if item.name.lower() == noun1:
+					if(isinstance(item, spaceitems.Medicine)):
+						heal_text = item.usedText
+						heal_text += " " + self.heal(item.addedHP)
+						self.inventory.pop(self.inventory.index(item))
+						return [True, heal_text]
 		elif(verb == 'equip'):
 			for item in self.inventory:
 				if item.name.lower() == noun1:

@@ -36,6 +36,11 @@ class SpaceFood(Item):
     def consume(self):
         return [self.eatenText, self.addedHP]
     
+class Medicine(Item):
+    addedHP = 0
+    def use(self):
+        return [self.usedText, self.addedHP]
+    
 class SpaceCream(SpaceFood):
 	def __init__(self, value = 0):
 		self.addedHP = 5
@@ -46,7 +51,21 @@ class SpaceCream(SpaceFood):
 			self.value = value
 		self.eatenText = "You have eaten the SpaceCream (tm)."
        
+class SpaceCarrots(SpaceFood):
+    def __init__(self):
+        self.addedHP = 7
+        self.name = "SpaceCarrots"
+        self.description = "A filling carrot"
+        self.droppedDescription = "The carrot you dropped is lying on the floor."
+        self.eatenText = "You have eaten the carrot."
         
+class SpaceSoda(SpaceFood):
+    def __init__(self):
+        self.addedHP = 3
+        self.name = "SpaceSoda"
+        self.description = "A can of soda"
+        self.droppedDescription = "The soda can you dropped is lying on the floor."
+        self.eatenText = "You have drank the soda."
         
 class SpaceSandwich(SpaceFood):
     def __init__(self):
@@ -107,3 +126,31 @@ class PodKey(Item):
 		self.droppedDescription = "A circular key is on the ground in front of you."
 	def __str__(self):
 		return "Name: {} Description: {}".format(self.name, self.description)
+    
+class Gauze(Medicine):
+    def __init__(self, value = 0):
+        self.addedHP = 10
+        self.name = "Gauze"
+        self.description = "A roll of healing tape"
+        self.droppedDescription = "The gauze you dropped is lying on the floor."
+        if(self.value == 0):
+            self.value = value
+        self.usedText = "You have used the gauze to cure wounds."
+class IcePack(Medicine):
+    def __init__(self, value = 0):
+        self.addedHP = 3
+        self.name = "Ice Pack"
+        self.description = "A cold bag"
+        self.droppedDescription = "The ice pack you dropped is lying on the floor."
+        if(self.value == 0):
+            self.value = value
+        self.usedText = "You have used the ice pack to cure wounds."
+class BandAid(Medicine):
+    def __init__(self, value = 0):
+        self.addedHP = 5
+        self.name = "Band-Aid"
+        self.description = "A sticky strip to avoid infection"
+        self.droppedDescription = "The band-aid you dropped is lying on the floor."
+        if(self.value == 0):
+            self.value = value
+        self.usedText = "You have used the band-aid to cure wounds."
